@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tweet_separator/view/pages/root_page.dart';
-import 'package:tweet_separator/utils/twitter_util.dart';
+import 'package:tweet_separator/models/twitter_login_helper.dart';
 
 class App extends StatelessWidget {
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -17,7 +17,7 @@ class App extends StatelessWidget {
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (_) => TwitterUtil(),
+            create: (_) => TwitterLoginHelper(),
           )
         ],
         child: RootPage(),

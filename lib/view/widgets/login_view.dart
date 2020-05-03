@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tweet_separator/utils/twitter_util.dart';
+import 'package:tweet_separator/models/twitter_login_helper.dart';
 
 class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final twitterUtil = Provider.of<TwitterUtil>(context);
+    final loginHelper = Provider.of<TwitterLoginHelper>(context);
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text('ログインが必要です。'),
           RaisedButton(
-            onPressed: () => twitterUtil.login(context),
+            onPressed: () => loginHelper.login(context),
             child: Text('ログイン'),
           )
         ],

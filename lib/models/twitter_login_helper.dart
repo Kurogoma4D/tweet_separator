@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -6,8 +5,8 @@ import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 
 enum KeyStoreStatus { Exist, NotExist, Unknown }
 
-class TwitterUtil extends ChangeNotifier {
-  TwitterUtil() {
+class TwitterLoginHelper extends ChangeNotifier {
+  TwitterLoginHelper() {
     _apiKey = DotEnv().env['TWITTER_API_KEY'];
     _apiSecret = DotEnv().env['TWITTER_API_SECRET'];
     twitterLogin = TwitterLogin(
