@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tweet_separator/models/twitter_status.dart';
 import 'package:twitter_1user/twitter_1user.dart';
@@ -28,6 +29,17 @@ class TwitterClient extends ChangeNotifier {
     for (final tweet in tweets) {
       recentTweets.add(TwitterStatus.fromJson(tweet));
     }
+    notifyListeners();
+  }
+
+  void onDismissedTweet(int index, DismissDirection direction) {
+    if (direction == DismissDirection.endToStart) {
+      /// 左から右
+    } else {
+      /// 右から左
+    }
+
+    recentTweets.removeAt(index);
     notifyListeners();
   }
 }

@@ -25,7 +25,23 @@ class _TweetList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tweets = Provider.of<TwitterClient>(context).recentTweets;
-    return Center(child: Text('home page'));
+    final client = Provider.of<TwitterClient>(context);
+    return ListView.separated(
+      itemCount: client.recentTweets.length,
+      separatorBuilder: (_, index) => const SizedBox(
+        height: 24,
+      ),
+      itemBuilder: (context, index) {
+        return Dismissible(
+          key: ValueKey(client.recentTweets[index].id),
+          onDismissed: (direction) => client.onDismissedTweet(index, direction),
+          background: Container(color: Colors.red),
+          secondaryBackground: Container(color: Colors.green),
+          child: Card(
+            child: Text(client.recentTweets[index].text),
+          ),
+        );
+      },
+    );
   }
 }
