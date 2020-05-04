@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 
+// ignore: constant_identifier_names
 enum KeyStoreStatus { Exist, NotExist, Unknown }
 
 class TwitterLoginHelper extends ChangeNotifier {
@@ -38,7 +39,7 @@ class TwitterLoginHelper extends ChangeNotifier {
   String get accessToken => _accessToken;
   String get accessSecret => _accessSecret;
 
-  final storage = FlutterSecureStorage();
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   KeyStoreStatus get status {
     if (!isStorageAccessed) {
@@ -50,12 +51,12 @@ class TwitterLoginHelper extends ChangeNotifier {
         : KeyStoreStatus.Exist;
   }
 
-  void login(BuildContext context) async {
+  Future<void> login(BuildContext context) async {
     final result = await twitterLogin.authorize();
 
     switch (result.status) {
       case TwitterLoginStatus.loggedIn:
-        final snackBar = SnackBar(content: Text('ログインしました！'));
+        const snackBar = SnackBar(content: Text('ログインしました！'));
         _accessToken = result.session.token;
         _accessSecret = result.session.secret;
         await storage.write(key: 'TWITTER_ACCESS_TOKEN', value: _accessToken);
@@ -65,11 +66,11 @@ class TwitterLoginHelper extends ChangeNotifier {
         break;
 
       case TwitterLoginStatus.cancelledByUser:
-        final snackBar = SnackBar(content: Text('キャンセルされました。'));
+        const snackBar = SnackBar(content: Text('キャンセルされました。'));
         Scaffold.of(context).showSnackBar(snackBar);
         break;
       case TwitterLoginStatus.error:
-        final snackBar = SnackBar(content: Text('エラーが発生しました。'));
+        const snackBar = SnackBar(content: Text('エラーが発生しました。'));
         Scaffold.of(context).showSnackBar(snackBar);
         break;
     }

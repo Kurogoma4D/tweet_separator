@@ -8,7 +8,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginHelper = Provider.of<TwitterLoginHelper>(context);
     return ChangeNotifierProvider(
-      lazy: false,
       create: (_) => TwitterClient(
         apiKey: loginHelper.apiKey,
         apiSecret: loginHelper.apiSecret,

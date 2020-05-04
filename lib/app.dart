@@ -4,7 +4,7 @@ import 'package:tweet_separator/view/pages/root_page.dart';
 import 'package:tweet_separator/models/twitter_login_helper.dart';
 
 class App extends StatelessWidget {
-  final navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {

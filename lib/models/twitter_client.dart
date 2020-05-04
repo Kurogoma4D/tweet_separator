@@ -18,13 +18,13 @@ class TwitterClient extends ChangeNotifier {
   Twitter twitter;
   List<TwitterStatus> recentTweets = [];
 
-  void getRecentTweets() async {
+  Future<void> getRecentTweets() async {
     final response = await twitter.request(
       'get',
       'statuses/home_timeline.json',
       {'trim_user': 'true', 'exclude_replies': 'true'},
     );
-    final tweets = jsonDecode(response);
+    final tweets = jsonDecode(response) as List<Map<String, dynamic>>;
 
     for (final tweet in tweets) {
       recentTweets.add(TwitterStatus.fromJson(tweet));
