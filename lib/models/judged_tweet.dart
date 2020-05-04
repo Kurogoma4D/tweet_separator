@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 class JudgedTweet {
@@ -49,12 +50,20 @@ class JudgedStoreHelper {
     );
   }
 
-  Future<List<JudgedTweet>> getExistUsers(String existIds) async {
-    final List<Map> judgedUsers = await db
-        .rawQuery('''select * from $tableName where id in ($existIds)''');
+  Future<List<JudgedTweet>> getExistUsers(Iterable<int> existIds) async {
+    final List<Map> judgedUsers =
+        await db.query(tableName, where: 'id in (${existIds.join(', ')})');
     return judgedUsers
         .map((raw) => JudgedTweet.fromMap(raw as Map<String, dynamic>))
         .toList();
+  }
+
+  Future setJudgement(JudgedTweet judged) async {
+    await db.rawInsert(
+      '''insert or replace into $tableName(id, agreed, disagreed)
+        values(?, ?, ?)''',
+      <int>[judged.id, judged.agreed, judged.disagreed],
+    );
   }
 
   Future close() async => db.close();

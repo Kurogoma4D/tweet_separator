@@ -24,11 +24,7 @@ class HomeViewModel extends ChangeNotifier {
 
   Future initPage() async {
     await getRecentTweets();
-    final userIds = recentTweets
-        .map((t) => t.id)
-        .toSet()
-        .toString()
-        .replaceAll(RegExp(r'[{}]'), '');
+    final userIds = recentTweets.map((t) => t.user.id).toSet();
     judgedData.addAll(await dbHelper.getExistUsers(userIds));
     notifyListeners();
   }
@@ -47,19 +43,34 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void onDismissedTweet(int index, DismissDirection direction) {
+    final userId = recentTweets[index].user.id;
+    final judgedUserId =
+        judgedData.indexWhere((element) => element.id == userId);
+
+    final assignedId =
+        judgedUserId != -1 ? judgedUserId : _addNewJudgeUser(userId);
+
     if (direction == DismissDirection.endToStart) {
       /// 左から右
+      judgedData[assignedId].disagreed++;
     } else {
       /// 右から左
+      judgedData[assignedId].agreed++;
     }
 
+    dbHelper.setJudgement(judgedData[assignedId]);
     recentTweets.removeAt(index);
     notifyListeners();
   }
 
+  int _addNewJudgeUser(int userId) {
+    final newJudge = JudgedTweet(id: userId);
+    judgedData.add(newJudge);
+    return judgedData.length - 1;
+  }
+
   @override
   void dispose() {
-    print('bye');
     dbHelper.close();
     super.dispose();
   }
