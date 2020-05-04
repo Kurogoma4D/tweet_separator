@@ -28,6 +28,7 @@ dependencies:
   flutter_dotenv: any
   provider: ^4.0.5+1
   fluttertoast: ^4.0.1
+  flare_flutter: ^2.0.3
 
   # for Twitter feature
   flutter_twitter_login: ^1.1.0
@@ -57,6 +58,7 @@ flutter:
 
   assets:
     - .env
+    - mr_trash.flr
 
   # To add assets to your application, add an assets section, like this:
   # assets:
