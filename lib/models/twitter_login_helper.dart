@@ -51,7 +51,7 @@ class TwitterLoginHelper extends ChangeNotifier {
         : KeyStoreStatus.Exist;
   }
 
-  Future<void> login(BuildContext context) async {
+  Future login(BuildContext context) async {
     final result = await twitterLogin.authorize();
 
     switch (result.status) {

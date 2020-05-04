@@ -113,8 +113,8 @@ class Entities {
   Entities.fromJson(Map<String, dynamic> json) {
     if (json['urls'] != null) {
       urls = <Urls>[];
-      json['urls'].forEach((Map<String, dynamic> v) {
-        urls.add(new Urls.fromJson(v));
+      json['urls'].forEach((dynamic v) {
+        urls.add(new Urls.fromJson(v as Map<String, dynamic>));
       });
     }
   }
