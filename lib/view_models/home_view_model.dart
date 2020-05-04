@@ -1,48 +1,38 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tweet_separator/models/judged_tweet.dart';
+import 'package:tweet_separator/utils/judged_tweet.dart';
 import 'package:tweet_separator/models/twitter_status.dart';
-import 'package:twitter_1user/twitter_1user.dart';
+import 'package:tweet_separator/utils/twitter_client.dart';
+import 'package:tweet_separator/view/pages/organize_page.dart';
 
 class HomeViewModel extends ChangeNotifier {
   HomeViewModel({
-    String apiKey,
-    String apiSecret,
-    String accessToken,
-    String accessSecret,
+    this.twitterClient,
+    this.dbHelper,
   }) {
-    twitter = Twitter(apiKey, apiSecret, accessToken, accessSecret);
     initPage();
   }
 
-  Twitter twitter;
   List<TwitterStatus> recentTweets = [];
-  final JudgedStoreHelper dbHelper = JudgedStoreHelper();
+  final JudgedStoreHelper dbHelper;
+  final TwitterClient twitterClient;
   List<JudgedTweet> judgedData = [];
+  bool isPrepared = false;
 
   Future initPage() async {
-    await getRecentTweets();
+    if (twitterClient.status != KeyStoreStatus.Exist) {
+      return;
+    }
+
+    recentTweets = await twitterClient.fetchRecentTweets();
     final userIds = recentTweets.map((t) => t.user.id).toSet();
     judgedData.addAll(await dbHelper.getExistUsers(userIds));
+    isPrepared = true;
     notifyListeners();
   }
 
-  Future getRecentTweets() async {
-    final response = await twitter.request(
-      'get',
-      'statuses/home_timeline.json',
-      {'trim_user': 'true', 'exclude_replies': 'true'},
-    );
-    final tweets = jsonDecode(response) as List<dynamic>;
-
-    for (final tweet in tweets) {
-      recentTweets.add(TwitterStatus.fromJson(tweet as Map<String, dynamic>));
-    }
-  }
-
-  void onDismissedTweet(int index, DismissDirection direction) {
+  void onDismissedTweet(
+      int index, DismissDirection direction, BuildContext context) {
     final userId = recentTweets[index].user.id;
     final judgedUserId =
         judgedData.indexWhere((element) => element.id == userId);
@@ -60,6 +50,11 @@ class HomeViewModel extends ChangeNotifier {
 
     dbHelper.setJudgement(judgedData[assignedId]);
     recentTweets.removeAt(index);
+
+    if (recentTweets.isEmpty) {
+      Navigator.pushNamed(context, OrganizePage.routeName);
+    }
+
     notifyListeners();
   }
 

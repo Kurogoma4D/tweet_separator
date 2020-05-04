@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tweet_separator/models/twitter_status.dart';
 
 class JudgedTweet {
   JudgedTweet({
@@ -64,6 +64,17 @@ class JudgedStoreHelper {
         values(?, ?, ?)''',
       <int>[judged.id, judged.agreed, judged.disagreed],
     );
+  }
+
+  Future<List<String>> getOrganizableUser() async {
+    final List<Map> countedUsers =
+        await db.query(tableName, where: 'disagreed > 0');
+    final disagreedUsers = countedUsers
+        .map((raw) => JudgedTweet.fromMap(raw as Map<String, dynamic>))
+        .where((judged) =>
+            judged.disagreed / (judged.agreed + judged.disagreed) > 0.6)
+        .toList();
+    return disagreedUsers.map((user) => user.id.toString()).toList();
   }
 
   Future close() async => db.close();

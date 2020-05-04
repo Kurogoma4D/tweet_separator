@@ -220,3 +220,41 @@ class QuotedStatus {
     return data;
   }
 }
+
+class UserDetail {
+  UserDetail({
+    this.id,
+    this.idStr,
+    this.name,
+    this.screenName,
+    this.location,
+    this.description,
+  });
+
+  UserDetail.fromJson(Map<String, dynamic> json) {
+    id = json['id'] as int;
+    idStr = json['id_str'] as String;
+    name = json['name'] as String;
+    screenName = json['screen_name'] as String;
+    location = json['location'] as String;
+    description = json['description'] as String;
+  }
+
+  int id;
+  String idStr;
+  String name;
+  String screenName;
+  String location;
+  String description;
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['id_str'] = idStr;
+    data['name'] = name;
+    data['screen_name'] = screenName;
+    data['location'] = location;
+    data['description'] = description;
+    return data;
+  }
+}
