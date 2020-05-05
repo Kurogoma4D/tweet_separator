@@ -24,31 +24,67 @@ class _TweetList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context);
+    final headerStyle = Theme.of(context).textTheme.headline5.copyWith(
+          locale: const Locale('ja', 'JP'),
+          color: Colors.white,
+          height: 2,
+          fontWeight: FontWeight.bold,
+        );
 
     if (!viewModel.isPrepared) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return viewModel.recentTweets.length == 0
+    return viewModel.recentTweets.isEmpty
         ? _buildEmpty()
-        : _buildTweets(viewModel);
+        : _buildHeader(viewModel, headerStyle);
+  }
+
+  Widget _buildHeader(HomeViewModel viewModel, TextStyle headerStyle) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 56,
+          child: Text(
+            '最近のツイート',
+            style: headerStyle,
+          ),
+        ),
+        Expanded(
+          child: _buildTweets(viewModel),
+        ),
+      ],
+    );
   }
 
   Widget _buildTweets(HomeViewModel viewModel) {
-    return ListView.separated(
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: viewModel.recentTweets.length,
-      separatorBuilder: (_, index) => const SizedBox(
-        height: 24,
-      ),
       itemBuilder: (context, index) {
-        return Dismissible(
-          key: ValueKey(viewModel.recentTweets[index].id),
-          onDismissed: (direction) =>
-              viewModel.onDismissedTweet(index, direction, context),
-          background: Container(color: Colors.red),
-          secondaryBackground: Container(color: Colors.green),
-          child: Card(
-            child: Text(viewModel.recentTweets[index].text),
+        return AbsorbPointer(
+          absorbing: index > 0,
+          child: Dismissible(
+            key: ValueKey(viewModel.recentTweets[index].id),
+            onDismissed: (direction) =>
+                viewModel.onDismissedTweet(index, direction, context),
+            background: _buildBackground(false),
+            secondaryBackground: _buildBackground(true),
+            child: Card(
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: Text(
+                  viewModel.recentTweets[index].text,
+                  style: const TextStyle(
+                    locale: const Locale('ja', 'JP'),
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
           ),
         );
       },
@@ -94,6 +130,33 @@ class _TweetList extends StatelessWidget {
           flex: 3,
         )
       ],
+    );
+  }
+
+  Widget _buildBackground(bool isNecessary) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Align(
+        alignment: isNecessary ? Alignment.centerRight : Alignment.centerLeft,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8)
+            ..copyWith(right: 28),
+          decoration: BoxDecoration(
+            color:
+                isNecessary ? const Color(0xff588C8C) : const Color(0xffD9042B),
+            borderRadius: BorderRadius.circular(32),
+          ),
+          child: Text(
+            isNecessary ? '😆 必要' : '😢 不要',
+            style: const TextStyle(
+              locale: const Locale('ja', 'JP'),
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

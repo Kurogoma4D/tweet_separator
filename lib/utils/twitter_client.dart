@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:tweet_separator/models/twitter_status.dart';
 import 'package:twitter_1user/twitter_1user.dart';
 
@@ -39,7 +40,7 @@ class TwitterClient extends ChangeNotifier {
   String _accessSecret = '';
   TwitterLogin twitterLogin;
   bool isStorageAccessed = false;
-  Twitter twitter = null;
+  Twitter twitter;
 
   String get apiKey => _apiKey;
   String get apiSecret => _apiSecret;
@@ -47,6 +48,7 @@ class TwitterClient extends ChangeNotifier {
   String get accessSecret => _accessSecret;
 
   final FlutterSecureStorage storage = const FlutterSecureStorage();
+  final HtmlUnescape unescape = HtmlUnescape();
 
   KeyStoreStatus get status {
     if (!isStorageAccessed) {
@@ -69,15 +71,15 @@ class TwitterClient extends ChangeNotifier {
         await storage.write(key: 'TWITTER_ACCESS_TOKEN', value: _accessToken);
         await storage.write(key: 'TWITTER_ACCESS_SECRET', value: _accessSecret);
         notifyListeners();
-        Fluttertoast.showToast(msg: 'ログインしました！');
+        await Fluttertoast.showToast(msg: 'ログインしました！');
         break;
 
       case TwitterLoginStatus.cancelledByUser:
-        Fluttertoast.showToast(msg: 'キャンセルされました。');
+        await Fluttertoast.showToast(msg: 'キャンセルされました。');
         break;
 
       case TwitterLoginStatus.error:
-        Fluttertoast.showToast(msg: 'エラーが発生しました。');
+        await Fluttertoast.showToast(msg: 'エラーが発生しました。');
         break;
     }
   }
@@ -93,7 +95,7 @@ class TwitterClient extends ChangeNotifier {
         'statuses/home_timeline.json',
         {'trim_user': 'true', 'exclude_replies': 'true'},
       );
-      final tweets = jsonDecode(response) as List<dynamic>;
+      final tweets = jsonDecode(unescape.convert(response)) as List<dynamic>;
       return tweets
           .map((dynamic e) => TwitterStatus.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -114,7 +116,7 @@ class TwitterClient extends ChangeNotifier {
         'users/lookup.json',
         {'user_id': ids.join(',')},
       );
-      final users = jsonDecode(response) as List<dynamic>;
+      final users = jsonDecode(unescape.convert(response)) as List<dynamic>;
       return users
           .map((dynamic e) => UserDetail.fromJson(e as Map<String, dynamic>))
           .toList();

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tweet_separator/utils/custom_theme_data.dart';
 import 'package:tweet_separator/utils/judged_tweet.dart';
 import 'package:tweet_separator/utils/twitter_client.dart';
 import 'package:tweet_separator/view/pages/organize_page.dart';
 import 'package:tweet_separator/view/pages/root_page.dart';
-import 'package:tweet_separator/utils/twitter_client.dart';
 
 class App extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -22,9 +22,7 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Tweet Separator',
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+        theme: customThemeData,
         navigatorKey: navigatorKey,
         home: RootPage(),
         onGenerateRoute: (settings) {
