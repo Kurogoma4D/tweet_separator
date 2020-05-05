@@ -6,6 +6,10 @@ import 'package:tweet_separator/view/widgets/login_view.dart';
 import 'home_page.dart';
 
 class RootPage extends StatelessWidget {
+  const RootPage({Key key}) : super(key: key);
+
+  static const routeName = '/';
+
   @override
   Widget build(BuildContext context) {
     final client = Provider.of<TwitterClient>(context);

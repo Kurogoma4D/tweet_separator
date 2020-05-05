@@ -21,10 +21,11 @@ class App extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        locale: const Locale('ja', 'JP'),
         title: 'Tweet Separator',
         theme: customThemeData,
         navigatorKey: navigatorKey,
-        home: RootPage(),
+        home: const RootPage(),
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case OrganizePage.routeName:

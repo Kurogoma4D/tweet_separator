@@ -25,7 +25,6 @@ class _TweetList extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<HomeViewModel>(context);
     final headerStyle = Theme.of(context).textTheme.headline5.copyWith(
-          locale: const Locale('ja', 'JP'),
           color: Colors.white,
           height: 2,
           fontWeight: FontWeight.bold,
@@ -46,7 +45,7 @@ class _TweetList extends StatelessWidget {
         SizedBox(
           height: 56,
           child: Text(
-            '最近のツイート',
+            '最近のタイムライン',
             style: headerStyle,
           ),
         ),
@@ -78,7 +77,6 @@ class _TweetList extends StatelessWidget {
                 child: Text(
                   viewModel.recentTweets[index].text,
                   style: const TextStyle(
-                    locale: const Locale('ja', 'JP'),
                     color: Colors.white,
                     fontSize: 18,
                   ),
@@ -149,7 +147,6 @@ class _TweetList extends StatelessWidget {
           child: Text(
             isNecessary ? '😆 必要' : '😢 不要',
             style: const TextStyle(
-              locale: const Locale('ja', 'JP'),
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 24,

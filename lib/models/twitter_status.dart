@@ -229,6 +229,7 @@ class UserDetail {
     this.screenName,
     this.location,
     this.description,
+    this.profileImageUrlHttps,
   });
 
   UserDetail.fromJson(Map<String, dynamic> json) {
@@ -238,6 +239,7 @@ class UserDetail {
     screenName = json['screen_name'] as String;
     location = json['location'] as String;
     description = json['description'] as String;
+    profileImageUrlHttps = json['profile_image_url_https'] as String;
   }
 
   int id;
@@ -246,6 +248,7 @@ class UserDetail {
   String screenName;
   String location;
   String description;
+  String profileImageUrlHttps;
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -255,6 +258,7 @@ class UserDetail {
     data['screen_name'] = screenName;
     data['location'] = location;
     data['description'] = description;
+    data['profile_image_url_https'] = profileImageUrlHttps;
     return data;
   }
 }
