@@ -35,7 +35,7 @@ class _TweetList extends StatelessWidget {
     }
 
     return viewModel.recentTweets.isEmpty
-        ? _buildEmpty()
+        ? _buildEmpty(context)
         : _buildHeader(viewModel, headerStyle);
   }
 
@@ -89,7 +89,7 @@ class _TweetList extends StatelessWidget {
     );
   }
 
-  Widget _buildEmpty() {
+  Widget _buildEmpty(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -122,8 +122,23 @@ class _TweetList extends StatelessWidget {
           ],
         ),
         const Spacer(),
-        const Text('今日の分の断捨離は\n終わりました。'),
-        const Text('一日を楽しみましょう！'),
+        Text(
+          '今日の分の断捨離は\n終わりました。',
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+          textAlign: TextAlign.center,
+        ),
+        Text(
+          '一日を楽しみましょう！',
+          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+                height: 2,
+              ),
+          textAlign: TextAlign.center,
+        ),
         const Spacer(
           flex: 3,
         )

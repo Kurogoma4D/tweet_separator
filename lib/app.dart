@@ -5,6 +5,7 @@ import 'package:tweet_separator/utils/judged_tweet.dart';
 import 'package:tweet_separator/utils/twitter_client.dart';
 import 'package:tweet_separator/view/pages/organize_page.dart';
 import 'package:tweet_separator/view/pages/root_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -21,7 +22,13 @@ class App extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        locale: const Locale('ja', 'JP'),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ja', 'JP'),
+        ],
         title: 'Tweet Separator',
         theme: customThemeData,
         navigatorKey: navigatorKey,
