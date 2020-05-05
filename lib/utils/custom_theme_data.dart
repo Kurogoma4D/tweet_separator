@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 final ThemeData customThemeData = ThemeData(
-  visualDensity: VisualDensity.adaptivePlatformDensity,
   scaffoldBackgroundColor: const Color(0xff3C4758),
   cardTheme: CardTheme(
     color: const Color(0xff494F59),

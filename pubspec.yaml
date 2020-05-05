@@ -33,7 +33,8 @@ dependencies:
   url_launcher: any
 
   # for Twitter feature
-  flutter_twitter_login: ^1.1.0
+  flutter_twitter_login:
+    git: git://github.com/eudangeld/flutter_twitter_login.git
   twitter_1user: ^1.0.1
 
   # for persistent login
