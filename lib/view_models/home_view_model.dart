@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tweet_separator/utils/judged_tweet.dart';
 import 'package:tweet_separator/models/twitter_status.dart';
 import 'package:tweet_separator/utils/twitter_client.dart';
 import 'package:tweet_separator/view/pages/organize_page.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class HomeViewModel extends ChangeNotifier {
   HomeViewModel({
@@ -18,15 +21,25 @@ class HomeViewModel extends ChangeNotifier {
   final TwitterClient twitterClient;
   List<JudgedTweet> judgedData = [];
   bool isPrepared = false;
+  final DateFormat dateFormatter = DateFormat('yyyyMMdd', 'ja_JP');
+  SharedPreferences sharedPref;
 
   Future initPage() async {
     if (twitterClient.status != KeyStoreStatus.Exist) {
       return;
     }
+    initializeDateFormatting('ja_JP');
 
-    recentTweets = await twitterClient.fetchRecentTweets();
-    final userIds = recentTweets.map((t) => t.user.id).toSet();
-    judgedData.addAll(await dbHelper.getExistUsers(userIds));
+    sharedPref = await SharedPreferences.getInstance();
+    final today = DateTime.now();
+    final timeStamp = dateFormatter.format(today);
+    final lastStored = sharedPref.getString('timestamp') ?? '0';
+
+    if (int.tryParse(timeStamp) > int.tryParse(lastStored)) {
+      recentTweets = await twitterClient.fetchRecentTweets();
+      final userIds = recentTweets.map((t) => t.user.id).toSet();
+      judgedData.addAll(await dbHelper.getExistUsers(userIds));
+    }
     isPrepared = true;
     notifyListeners();
   }
@@ -52,9 +65,8 @@ class HomeViewModel extends ChangeNotifier {
     recentTweets.removeAt(index);
 
     if (recentTweets.isEmpty) {
-      Navigator.pushNamed(context, OrganizePage.routeName);
+      storeTimeStamp(context);
     }
-
     notifyListeners();
   }
 
@@ -64,9 +76,16 @@ class HomeViewModel extends ChangeNotifier {
     return judgedData.length - 1;
   }
 
-  @override
-  void dispose() {
-    dbHelper.close();
-    super.dispose();
+  Future storeTimeStamp(BuildContext context) async {
+    final today = DateTime.now();
+    final timeStamp = dateFormatter.format(today);
+
+    final dailyCount = sharedPref.getInt('daily_count') ?? 0;
+    if (dailyCount >= 7) {
+      Navigator.of(context).pushNamed(OrganizePage.routeName);
+      await sharedPref.setInt('daily_count', 0);
+    }
+    await sharedPref.setString('timestamp', timeStamp);
+    await sharedPref.setInt('daily_count', dailyCount + 1);
   }
 }

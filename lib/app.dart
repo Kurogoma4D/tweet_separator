@@ -19,6 +19,7 @@ class App extends StatelessWidget {
         ),
         Provider<JudgedStoreHelper>(
           create: (_) => JudgedStoreHelper(),
+          dispose: (_, dbHelper) => dbHelper.close(),
         ),
       ],
       child: MaterialApp(

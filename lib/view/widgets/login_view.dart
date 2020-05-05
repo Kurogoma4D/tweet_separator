@@ -10,7 +10,13 @@ class LoginView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Text('ログインが必要です。'),
+          const Text(
+            'ログインが必要です。',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
           RaisedButton(
             onPressed: loginHelper.login,
             child: const Text('ログイン'),

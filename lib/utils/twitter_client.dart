@@ -7,6 +7,7 @@ import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:tweet_separator/models/twitter_status.dart';
+import 'package:tweet_separator/utils/test_data.dart';
 import 'package:twitter_1user/twitter_1user.dart';
 
 // ignore: constant_identifier_names
@@ -90,15 +91,22 @@ class TwitterClient extends ChangeNotifier {
     }
 
     try {
-      final response = await twitter.request(
-        'get',
-        'statuses/home_timeline.json',
-        {'trim_user': 'true', 'exclude_replies': 'true'},
-      );
-      final tweets = jsonDecode(unescape.convert(response)) as List<dynamic>;
-      return tweets
-          .map((dynamic e) => TwitterStatus.fromJson(e as Map<String, dynamic>))
-          .toList();
+      var isDebug = false;
+      assert(isDebug = true);
+      if (isDebug) {
+        return testData;
+      } else {
+        final response = await twitter.request(
+          'get',
+          'statuses/home_timeline.json',
+          {'trim_user': 'true', 'exclude_replies': 'true'},
+        );
+        final tweets = jsonDecode(unescape.convert(response)) as List<dynamic>;
+        return tweets
+            .map((dynamic e) =>
+                TwitterStatus.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
     } on Exception catch (error) {
       print(error);
       return [];

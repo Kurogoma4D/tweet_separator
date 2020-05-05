@@ -1,29 +1,20 @@
 /// generated from https://javiercbk.github.io/json_to_dart/
 
 class TwitterStatus {
-  TwitterStatus(
-      {this.createdAt,
-      this.id,
-      this.idStr,
-      this.text,
-      this.truncated,
-      this.entities,
-      this.source,
-      this.user,
-      this.isQuoteStatus,
-      this.quotedStatusId,
-      this.quotedStatusIdStr,
-      this.quotedStatus,
-      this.retweetCount,
-      this.favoriteCount,
-      this.favorited,
-      this.retweeted,
-      this.possiblySensitive,
-      this.possiblySensitiveAppealable,
-      this.lang});
+  TwitterStatus({
+    this.id,
+    this.idStr,
+    this.text,
+    this.truncated,
+    this.entities,
+    this.user,
+    this.isQuoteStatus,
+    this.quotedStatusId,
+    this.quotedStatusIdStr,
+    this.quotedStatus,
+  });
 
   TwitterStatus.fromJson(Map<String, dynamic> json) {
-    createdAt = json['created_at'] as String;
     id = json['id'] as int;
     idStr = json['id_str'] as String;
     text = json['text'] as String;
@@ -34,7 +25,6 @@ class TwitterStatus {
     } else {
       entities = null;
     }
-    source = json['source'] as String;
     if (json['user'] != null) {
       user = new User.fromJson(json['user'] as Map<String, dynamic>);
     } else {
@@ -47,38 +37,21 @@ class TwitterStatus {
         ? new QuotedStatus.fromJson(
             json['quoted_status'] as Map<String, dynamic>)
         : null;
-    retweetCount = json['retweet_count'] as int;
-    favoriteCount = json['favorite_count'] as int;
-    favorited = json['favorited'] as bool;
-    retweeted = json['retweeted'] as bool;
-    possiblySensitive = json['possibly_sensitive'] as bool;
-    possiblySensitiveAppealable = json['possibly_sensitive_appealable'] as bool;
-    lang = json['lang'] as String;
   }
 
-  String createdAt;
   int id;
   String idStr;
   String text;
   bool truncated;
   Entities entities;
-  String source;
   User user;
   bool isQuoteStatus;
   int quotedStatusId;
   String quotedStatusIdStr;
   QuotedStatus quotedStatus;
-  int retweetCount;
-  int favoriteCount;
-  bool favorited;
-  bool retweeted;
-  bool possiblySensitive;
-  bool possiblySensitiveAppealable;
-  String lang;
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['created_at'] = createdAt;
     data['id'] = id;
     data['id_str'] = idStr;
     data['text'] = text;
@@ -86,7 +59,6 @@ class TwitterStatus {
     if (entities != null) {
       data['entities'] = entities.toJson();
     }
-    data['source'] = source;
     if (user != null) {
       data['user'] = user.toJson();
     }
@@ -96,13 +68,6 @@ class TwitterStatus {
     if (quotedStatus != null) {
       data['quoted_status'] = quotedStatus.toJson();
     }
-    data['retweet_count'] = retweetCount;
-    data['favorite_count'] = favoriteCount;
-    data['favorited'] = favorited;
-    data['retweeted'] = retweeted;
-    data['possibly_sensitive'] = possiblySensitive;
-    data['possibly_sensitive_appealable'] = possiblySensitiveAppealable;
-    data['lang'] = lang;
     return data;
   }
 }

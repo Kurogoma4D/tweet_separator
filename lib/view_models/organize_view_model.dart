@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
 import 'package:tweet_separator/models/twitter_status.dart';
 import 'package:tweet_separator/utils/judged_tweet.dart';
+import 'package:tweet_separator/utils/test_data.dart';
 import 'package:tweet_separator/utils/twitter_client.dart';
 import 'package:tweet_separator/view/pages/root_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,8 +31,17 @@ class OrganizeViewModel extends ChangeNotifier {
 
   Future initPage() async {
     final organizable = await dbHelper.getOrganizableUser();
-    organizableUsers
-        .addAll(await twitterClient.fetchUsersByIdList(organizable));
+
+    var isDebug = false;
+    assert(isDebug = true);
+
+    if (isDebug) {
+      organizableUsers.addAll(testUsers);
+    } else {
+      organizableUsers
+          .addAll(await twitterClient.fetchUsersByIdList(organizable));
+    }
+
     notifyListeners();
   }
 

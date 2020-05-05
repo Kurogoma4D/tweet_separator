@@ -51,6 +51,10 @@ class JudgedStoreHelper {
   }
 
   Future<List<JudgedTweet>> getExistUsers(Iterable<int> existIds) async {
+    if (db == null) {
+      return [];
+    }
+
     final List<Map> judgedUsers =
         await db.query(tableName, where: 'id in (${existIds.join(', ')})');
     return judgedUsers
