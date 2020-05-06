@@ -59,7 +59,7 @@ class _TweetList extends StatelessWidget {
 
   Widget _buildTweets(HomeViewModel viewModel) {
     return ListView.builder(
-//      physics: const NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: viewModel.recentTweets.length,
       itemBuilder: (context, index) {
         return AbsorbPointer(
@@ -81,6 +81,7 @@ class _TweetList extends StatelessWidget {
                     Expanded(
                       child: Text(
                         viewModel.recentTweets[index].text,
+                        maxLines: 8,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -109,16 +110,13 @@ class _TweetList extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 12,
               mainAxisSpacing: 8,
-              childAspectRatio: 1,
+              childAspectRatio: 16 / 9,
             ),
-            itemBuilder: (context, index) => AspectRatio(
-              aspectRatio: 1,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  status.entities.media[index].mediaUrlHttps,
-                  fit: BoxFit.cover,
-                ),
+            itemBuilder: (context, index) => ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Image.network(
+                status.entities.media[index].mediaUrlHttps,
+                fit: BoxFit.cover,
               ),
             ),
           );
