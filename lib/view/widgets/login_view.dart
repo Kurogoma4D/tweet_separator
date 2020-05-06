@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tweet_separator/utils/twitter_util.dart';
+import 'package:tweet_separator/utils/twitter_client.dart';
 
 class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final twitterUtil = Provider.of<TwitterUtil>(context);
+    final loginHelper = Provider.of<TwitterClient>(context);
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('ログインが必要です。'),
+          const Text(
+            'ログインが必要です。',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
           RaisedButton(
-            onPressed: () => twitterUtil.login(context),
-            child: Text('ログイン'),
+            onPressed: loginHelper.login,
+            child: const Text('ログイン'),
           )
         ],
       ),

@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tweet_separator/utils/twitter_util.dart';
+import 'package:tweet_separator/utils/twitter_client.dart';
 import 'package:tweet_separator/view/widgets/login_view.dart';
 
 import 'home_page.dart';
 
 class RootPage extends StatelessWidget {
+  const RootPage({Key key}) : super(key: key);
+
+  static const routeName = '/';
+
   @override
   Widget build(BuildContext context) {
-    final twitterUtil = Provider.of<TwitterUtil>(context);
+    final client = Provider.of<TwitterClient>(context);
 
-    return Scaffold(
-      body: _buildBody(twitterUtil),
+    return SafeArea(
+      child: Scaffold(
+        body: _buildBody(client),
+      ),
     );
   }
 
-  Widget _buildBody(TwitterUtil twitterUtil) {
-    switch (twitterUtil.status) {
+  Widget _buildBody(TwitterClient client) {
+    switch (client.status) {
       case KeyStoreStatus.Exist:
         return HomePage();
       case KeyStoreStatus.NotExist:
