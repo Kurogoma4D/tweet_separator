@@ -81,7 +81,7 @@ class HomeViewModel extends ChangeNotifier {
     final timeStamp = dateFormatter.format(today);
 
     final dailyCount = sharedPref.getInt('daily_count') ?? 0;
-    if (dailyCount >= 7) {
+    if (dailyCount >= 0) {
       Navigator.of(context).pushNamed(OrganizePage.routeName);
       await sharedPref.setInt('daily_count', 0);
     }

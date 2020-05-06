@@ -73,7 +73,7 @@ class TwitterStatus {
 }
 
 class Entities {
-  Entities({this.urls});
+  Entities({this.urls, this.media});
 
   Entities.fromJson(Map<String, dynamic> json) {
     if (json['urls'] != null) {
@@ -82,16 +82,47 @@ class Entities {
         urls.add(new Urls.fromJson(v as Map<String, dynamic>));
       });
     }
+    if (json['media'] != null) {
+      media = <Media>[];
+      json['media'].forEach((dynamic v) {
+        media.add(new Media.fromJson(v as Map<String, dynamic>));
+      });
+    }
   }
 
-  // TODO(Kurogoma4D): mediaに対応する
   List<Urls> urls;
+  List<Media> media;
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     if (urls != null) {
       data['urls'] = urls.map((v) => v.toJson()).toList();
     }
+    if (media != null) {
+      data['media'] = media.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Media {
+  Media({
+    this.id,
+    this.mediaUrlHttps,
+  });
+
+  Media.fromJson(Map<String, dynamic> json) {
+    id = json['id'] as int;
+    mediaUrlHttps = json['media_url_https'] as String;
+  }
+
+  int id;
+  String mediaUrlHttps;
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['media_url_https'] = mediaUrlHttps;
     return data;
   }
 }

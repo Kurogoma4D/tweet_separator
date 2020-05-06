@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tweet_separator/models/twitter_status.dart';
 import 'package:tweet_separator/utils/twitter_client.dart';
 import 'package:tweet_separator/view_models/home_view_model.dart';
 import 'package:tweet_separator/utils/judged_tweet.dart';
@@ -58,7 +59,7 @@ class _TweetList extends StatelessWidget {
 
   Widget _buildTweets(HomeViewModel viewModel) {
     return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
+//      physics: const NeverScrollableScrollPhysics(),
       itemCount: viewModel.recentTweets.length,
       itemBuilder: (context, index) {
         return AbsorbPointer(
@@ -74,12 +75,20 @@ class _TweetList extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.7,
-                child: Text(
-                  viewModel.recentTweets[index].text,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        viewModel.recentTweets[index].text,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    _buildImageGrid(viewModel.recentTweets[index]),
+                  ],
                 ),
               ),
             ),
@@ -87,6 +96,32 @@ class _TweetList extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget _buildImageGrid(TwitterStatus status) {
+    return status.entities.media == null
+        ? const SizedBox.shrink()
+        : GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: status.entities.media.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 8,
+              childAspectRatio: 1,
+            ),
+            itemBuilder: (context, index) => AspectRatio(
+              aspectRatio: 1,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  status.entities.media[index].mediaUrlHttps,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          );
   }
 
   Widget _buildEmpty(BuildContext context) {
